@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon-Style Store Clone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+ <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <header>
+    <div class="top-nav">
+      <div class="logo" onclick="scrollToTop()"><img src="images/logo.png" alt=""  ></div>
+
+      <div class="location">
+        Deliver to 
+        <strong>Pakistan</strong>
+      </div>
+
+      <div class="search-bar">
+        <select id="categorySelect" onchange="applyFilters()">
+          <option value="All">All</option>
+          <option value="Arts and Crafts">Arts and Crafts</option>
+          <option value="Automotive">Automotive</option>
+          <option value="Baby">Baby</option>
+          <option value="Beauty and personal care">Beauty and personal care</option>
+          <option value="Books">Books</option>
+          <option value="boy's Fashion">boy's Fashion</option>
+          <option value="computers">computers</option>
+          <option value="Deals">Deals</option>
+          <option value="Digital Music">Digital Music</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Girl's Fashion">Girl's Fashion</option>
+          <option value="Health & Hold">Health & Hold</option>
+          <option value="House & Kitchen">House & Kitchen</option>
+          <option value="Industrial & scientific ">Industrial & scientific </option>
+          <option value="Kindle Store">Kindle Store</option>
+          <option value="Lugage">Lugage</option>
+          <option value="Men's Fashion">Men's Fashion</option>
+          <option value="Movies & tv">Movies & tv</option>
+          <option value="Musics">Musics</option>
+          <option value="prime video">prime video</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Search Amazon clone" />
+        <button onclick="applyFilters()"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+
+      <div class="account" onclick="openAuthModal()">
+        Hello, <span id="navUserName">sign in</span>
+        <strong>Account & Lists</strong>
+      </div>
+
+      <div class="returns nav-btn">
+        Returns
+        <strong>& Orders</strong>
+      </div>
+
+      <div class="cart" onclick="openCartDrawer()">
+        Cart <span class="cart-count" id="cartCount">0</span>
+        <strong id="cartTotalPreview">$0.00</strong>
+      </div>
+    </div>
+
+   <div class="sub-nav-wrapper">
+  <button class="sub-nav-toggle" onclick="toggleSubNav()" aria-label="Toggle menu" aria-expanded="false" id="subNavToggle">
+    <span>☰ Menu</span>
+  </button>
+
+  <div class="sub-nav" id="subNavMenu">
+    <button class="active-chip" onclick="setQuickFilter('All', this)"> All</button>
+    <button onclick="setQuickFilter('Deals', this)">Today's Deals</button>
+    <button onclick="setQuickFilter('Electronics', this)">Electronics</button>
+    <button onclick="setQuickFilter('Home', this)">Home</button>
+    <button onclick="setQuickFilter('Fashion', this)">Fashion</button>
+    <button onclick="setQuickFilter('Books', this)">Books</button>
+    <button onclick="setQuickFilter('Accessories', this)">Accessories</button>
+    <a href="#signinBanner">Customer Service</a>
+    <a href="#">Gift Cards</a>
+    <a href="#">Sell</a>
+  </div>
+</div>
+  </header>
+
+  <section class="hero">
+    <div class="slider-container" id="sliderContainer">
+      <div class="slides">
+        <div class="slide active">
+          <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=2000&q=80" alt="Back to School Deals" />
+          <div class="slide-overlay">
+            <h2>Back to School Deals</h2>
+            <p>Save up to 50% on laptops, books and daily essentials.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=2000&q=80" alt="Electronics Sale" />
+          <div class="slide-overlay">
+            <h2>Electronics Blowout</h2>
+            <p>Latest smartphones, watches and audio gear at special prices.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=2000&q=80" alt="Fashion Trends" />
+          <div class="slide-overlay">
+            <h2>New Fashion Arrivals</h2>
+            <p>Shop trending looks for men and women.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=2000&q=80" alt="Home Essentials" />
+          <div class="slide-overlay">
+            <h2>Home Refresh Sale</h2>
+            <p>Furniture, decor and kitchen upgrades for every room.</p>
+          </div>
+        </div>
+      </div>
+      <button class="slider-arrow left" onclick="prevSlide()" aria-label="Previous slide">‹</button>
+      <button class="slider-arrow right" onclick="nextSlideManual()" aria-label="Next slide">›</button>
+      <div class="nav-dots">
+        <span class="dot active" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        <span class="dot" onclick="currentSlide(4)"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-grid">
+    <div class="box">
+      <h2>New home arrivals under $50</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Dining" /><p>Dining</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Home" /><p>Home</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Kitchen" /><p>Kitchen</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" alt="Decor" /><p>Decor</p></div>
+      </div>
+      <a href="#productsSection">See more</a>
+    </div>
+
+    <div class="box">
+      <h2>Top categories in Kitchen appliances</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+<div class="box">
+      <h2>Shop Fashion for less</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Get your game on</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Fashion trends you like</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Up to 45% off on home refresh</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+    <div class="box">
+      <h2>Easy updates for elevated spaces</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=600&q=80" alt="Mens" /><p>Men</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=600&q=80" alt="Women" /><p>Women</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80" alt="Shoes" /><p>Shoes</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" alt="Accessories" /><p>Accessories</p></div>
+      </div>
+      <a href="#productsSection">Explore fashion</a>
+    </div>
+
+    <div class="box">
+      <h2>Get ready for Easter</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80" alt="Books" /><p>Books</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&q=80" alt="Study" /><p>Study</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=600&q=80" alt="Office" /><p>Office</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=600&q=80" alt="Courses" /><p>Courses</p></div>
+      </div>
+      <a href="#productsSection">Discover more</a>
+    </div>
+  </section>
+
+ 
+
+  <!-- Horizontal product slider (200px height, items 200px width) -->
+  <section class="products-section mini-slider-section">
+    <div class="products-header">
+      <h2>Best Sellers in Clothing, Shoes & Jewelry</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(this, -2)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(this, 2)">›</button>
+
+      <div class="mini-slider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+         <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="products-section mini-slider-section">
+    <div class="products-header">
+      <h2>Top Sellers in Toys for you</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(this, -2)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(this, 2)">›</button>
+
+      <div class="mini-slider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+         <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+<section class="section-grid1">
+    <div class="box">
+      <h2>Level up your gaming</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Dining" /><p>Dining</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Home" /><p>Home</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Kitchen" /><p>Kitchen</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" alt="Decor" /><p>Decor</p></div>
+      </div>
+      <a href="#productsSection">See more</a>
+    </div>
+
+    <div class="box">
+      <h2>Gear up to get fit</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+<div class="box">
+      <h2>Level up your beauty routine</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Have more fun with family</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+  </section>
+
+  <section class="products-section mini-slider-section">
+    <div class="products-header">
+      <h2>Top picks for Pakistan</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(this, -1)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(this, 1)">›</button>
+
+      <div class="mini-slider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+        <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="products-section mini-slider-section">
+    <div class="products-header">
+      <h2>Best Sellers in Computers & Accessories</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(this, -1)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(this, 1)">›</button>
+
+      <div class="mini-slider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+          <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="section-grid1">
+    <div class="box">
+      <h2>Level up your PC here</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Dining" /><p>Dining</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Home" /><p>Home</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Kitchen" /><p>Kitchen</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" alt="Decor" /><p>Decor</p></div>
+      </div>
+      <a href="#productsSection">See more</a>
+    </div>
+
+    <div class="box">
+      <h2>Gaming merchandise</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+<div class="box">
+      <h2>Shop for your home essentials</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Most-loved watches</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+  </section>
+
+  <section class="products-section mini-slider-section">
+    <div class="products-header">
+      <h2>Popular products in Wireless internationally</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(this, -1)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(this, 1)">›</button>
+
+      <div class="mini-slider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+         <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="products-section mini-slider-section">
+    <div class="products-header">
+      <h2>International top sellers in Kitchen
+</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(this, -1)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(this, 1)">›</button>
+
+      <div class="mini-slider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+          <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+  
+  <section class="section-grid1">
+    <div class="box">
+      <h2>Finds for Home</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Dining" /><p>Dining</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Home" /><p>Home</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Kitchen" /><p>Kitchen</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" alt="Decor" /><p>Decor</p></div>
+      </div>
+      <a href="#productsSection">See more</a>
+    </div>
+
+    <div class="box">
+      <h2>Deals on top categories</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+<div class="box">
+      <h2>Score the top PCs & Accessories</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Explore more in Sports</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+  </section>
+    <section class="products-section mini-slider-section">
+    <div class="products-header">
+      <h2>Best Sellers in Beauty & Personal Care</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(this, -1)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(this, 1)">›</button>
+
+      <div class="mini-slider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+         <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+  <section class="products-section" id="productsSection">
+  <div class="products-header">
+    <h2>Customers who viewed items in your browsing history also viewed</h2>
+    <p id="resultsText">Showing 0 items</p>
+  </div>
+
+  <div class="toolbar">
+    <div class="toolbar-right">
+      <label for="sortSelect">Sort by:</label>
+      <select id="sortSelect" onchange="applyFilters()">
+        <option value="featured">Featured</option>
+        <option value="priceLow">Price: Low to High</option>
+        <option value="priceHigh">Price: High to Low</option>
+        <option value="ratingHigh">Top Rated</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="products-slider-wrapper">
+    <button class="slider-arrow left" onclick="scrollProducts(-1)">‹</button>
+    <button class="slider-arrow right" onclick="scrollProducts(1)">›</button>
+
+    <div class="products-slider" id="productsContainer"></div>
+  </div>
+</section>
+  
+  <section class="signin-banner" id="signinBanner">
+    <h3>See personalized recommendations</h3>
+    <p id="signinText">Sign in to save your cart, manage your account, and view your orders.</p>
+    <button class="cta-btn" onclick="openAuthModal()">Sign in</button>
+  </section>
+
+  <div class="footer-top" onclick="scrollToTop()">Back to top</div>
+
+  <footer class="footer-main">
+    <div class="footer-columns">
+      <div>
+        <h4>Get to Know Us</h4>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+        <a href="#">About Amazon</a>
+        <a href="#">Investor Relations</a>
+        <a href="#">Amazon Devices</a>
+        <a href="#">Amazon Science</a>
+      </div>
+      <div>
+        <h4>Make Money with Us</h4>
+        <a href="#">Sell products on Amazon</a>
+        <a href="#">Sell on Amazon Business</a>
+        <a href="#">Sell apps on Amazon</a>
+        <a href="#">Become an Affiliate</a>
+        <a href="#">Advertise Your Products</a>
+        <a href="#">Self-Publish with Us</a>
+        <a href="#">Host an Amazon Hub</a>
+        <a href="#">See More Make Money with Us</a>
+      </div>
+      <div>
+        <h4>Amazon Payment Products</h4>
+        <a href="#">Amazon Business Card</a>
+        <a href="#">Shop with points</a>
+        <a href="#">Reload Your Balance</a>
+        <a href="#">Amazon Currency Converter</a>
+      </div>
+      <div>
+        <h4>Let Us Help You</h4>
+        <a href="#">Amazon and COVID- <br> 19</a>
+        <a href="#">Your Account</a>
+        <a href="#">Your Orders</a>
+        <a href="#">Shipping Rates<br> & Policies</a>
+           <a href="#">Returns &<br> Replacements</a>
+              <a href="#">Manage Your<br> Content and  Devices</a>
+                 <a href="#">Help</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="overlay" id="overlay" onclick="closeAllPanels()"></div>
+
+  <aside class="drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <h3>Your Cart</h3>
+      <button class="close-btn" onclick="closeCartDrawer()">×</button>
+    </div>
+    <div class="drawer-body" id="cartItemsContainer"></div>
+    <div class="drawer-footer">
+      <div><strong>Subtotal:</strong> <span id="cartSubtotal">$0.00</span></div>
+      <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+      <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+    </div>
+  </aside>
+
+  <div class="modal" id="productModal">
+    <div class="modal-header">
+      <h3>Product Details</h3>
+      <button class="close-btn" onclick="closeProductModal()">×</button>
+    </div>
+    <div class="modal-body" id="productModalBody"></div>
+  </div>
+
+  <div class="modal" id="authModal">
+    <div class="modal-header">
+      
+      <h3>Account Access</h3>
+      <button class="close-btn" onclick="closeAuthModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="signinTabBtn" onclick="switchAuthTab('signin')">Sign In</button>
+        <button class="auth-tab" id="signupTabBtn" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+      <form class="auth-form" id="authForm" onsubmit="handleAuth(event)">
+        <input type="text" id="authName" placeholder="Full name" style="display:none" />
+        <input type="email" id="authEmail" placeholder="Email address" required />
+        <input type="password" id="authPassword" placeholder="Password" required />
+        <button class="auth-submit" type="submit" id="authSubmitBtn">Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>

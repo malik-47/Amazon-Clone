@@ -1,0 +1,2072 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon-Style Store Clone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    :root {
+      --nav-dark: #131921;
+      --nav-mid: #232f3e;
+      --bg: #eaeded;
+      --accent: #febd69;
+      --accent-soft: #ffd814;
+      --text: #111;
+      --muted: #565959;
+      --card: #ffffff;
+      --danger: #cc0c39;
+      --success: #067d62;
+      --border: #d5d9d9;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body.no-scroll {
+      overflow: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .top-nav {
+      background: var(--nav-dark);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 18px;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+    }
+
+    .logo span {
+      color: #f3a847;
+    }
+
+    .location,
+    .account,
+    .returns,
+    .cart,
+    .nav-btn {
+      font-size: 12px;
+      min-width: fit-content;
+      border: 1px solid transparent;
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .location:hover,
+    .account:hover,
+    .returns:hover,
+    .cart:hover,
+    .nav-btn:hover,
+    .logo:hover {
+      border-color: #fff;
+    }
+
+    .location strong,
+    .account strong,
+    .returns strong,
+    .cart strong,
+    .nav-btn strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .search-bar {
+      flex: 1;
+      display: flex;
+      min-width: 260px;
+      height: 42px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .search-bar select,
+    .search-bar input,
+    .search-bar button {
+      border: none;
+      outline: none;
+    }
+
+    .search-bar select {
+      width: 62px;
+      background: #e6e6e6;
+      padding: 0 8px;
+      cursor: pointer;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 0 12px;
+      font-size: 15px;
+    }
+
+    .search-bar button {
+      width: 50px;
+      background: var(--accent);
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+ .sub-nav-wrapper {
+  background: var(--nav-mid);
+  color: white;
+  position: relative;
+}
+
+.sub-nav-toggle {
+  display: none;
+  width: 100%;
+  background: var(--nav-mid);
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sub-nav {
+  background: var(--nav-mid);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 18px;
+  font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.sub-nav a,
+.sub-nav button {
+  background: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+.sub-nav a:hover,
+.sub-nav button:hover,
+.sub-nav .active-chip {
+  outline: 1px solid white;
+}
+
+@media (max-width: 768px) {
+  .sub-nav-toggle {
+    display: block;
+  }
+
+  .sub-nav {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    padding: 10px 12px 14px;
+  }
+
+  .sub-nav.show {
+    display: flex;
+  }
+
+  .sub-nav a,
+  .sub-nav button {
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+  }
+}
+
+    .hero {
+      position: relative;
+      height: 380px;
+      overflow: hidden;
+    }
+
+    .slider-container,
+    .slides,
+    .slide {
+      width: 100%;
+      height: 100%;
+    }
+
+    .slider-container {
+      position: relative;
+    }
+
+    .slides {
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.7s ease-in-out;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .slide-overlay {
+      position: absolute;
+      left: 50%;
+      bottom: 52px;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.68);
+      color: white;
+      padding: 20px 28px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 90%;
+    }
+
+    .slide-overlay h2 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .slide-overlay p {
+      font-size: 16px;
+    }
+
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.7);
+      background: rgba(0,0,0,0.35);
+      color: white;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 3;
+      transition: 0.2s ease;
+      user-select: none;
+    }
+
+    .slider-arrow:hover {
+      background: rgba(0,0,0,0.6);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .slider-arrow.left {
+      left: 18px;
+    }
+
+    .slider-arrow.right {
+      right: 18px;
+    }
+
+    .nav-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 2;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .dot.active,
+    .dot:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+    #miniSlider img{
+      width: 200px;
+      height: 200px;
+    }
+ .section-grid1 {
+      width: 95%;
+      max-width: 1500px;
+      margin: 20px auto 24px;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .section-grid {
+      width: 95%;
+      max-width: 1500px;
+      margin: -110px auto 24px;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .box,
+    .products-section,
+    .deals-strip,
+    .signin-banner {
+      background: var(--card);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .box {
+      padding: 20px;
+      min-height: 340px;
+    }
+
+    .box h2 {
+      font-size: 21px;
+      margin-bottom: 14px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mini-item img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      margin-bottom: 6px;
+    }
+
+    .mini-item p {
+      font-size: 12px;
+      color: #333;
+    }
+
+    .box a {
+      color: #007185;
+      font-size: 13px;
+      display: inline-block;
+      margin-top: 18px;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .toolbar select,
+    .toolbar button {
+      border: 1px solid var(--border);
+      background: white;
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .toolbar button.active-filter {
+      background: #edf7ff;
+      border-color: #8db7d8;
+    }
+
+    .products-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .products-header h2 {
+      font-size: 24px;
+    }
+
+    .products-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .product-card {
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 14px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--danger);
+      color: white;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+      width: fit-content;
+    }
+
+    .prime-badge {
+      font-size: 12px;
+      color: #007185;
+      font-weight: bold;
+    }
+
+    .product-title {
+      font-size: 15px;
+      line-height: 1.4;
+      min-height: 42px;
+      cursor: pointer;
+    }
+
+    .product-title:hover {
+      color: #c7511f;
+    }
+
+    .rating {
+      color: #f08804;
+      font-size: 14px;
+    }
+
+    .price {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .price sup {
+      font-size: 12px;
+      top: -0.6em;
+      position: relative;
+    }
+
+    .old-price,
+    .delivery,
+    .stock,
+    .muted {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .stock.in {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .add-cart,
+    .view-btn,
+    .cta-btn,
+    .secondary-btn,
+    .auth-submit,
+    .qty-btn,
+    .checkout-btn,
+    .clear-btn {
+      border-radius: 20px;
+      padding: 10px;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .add-cart,
+    .cta-btn,
+    .qty-btn,
+    .checkout-btn,
+    .auth-submit {
+      background: var(--accent-soft);
+      border-color: #fcd200;
+    }
+
+    .view-btn,
+    .secondary-btn,
+    .clear-btn {
+      background: #f7fafa;
+      border-color: var(--border);
+    }
+
+    .signin-banner {
+      text-align: center;
+    }
+
+    .signin-banner h3 {
+      margin-bottom: 8px;
+      font-size: 22px;
+    }
+
+    .signin-banner p {
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .footer-top {
+      background: #37475a;
+      color: white;
+      text-align: center;
+      padding: 16px;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 24px;
+    }
+
+    .footer-main {
+      background: var(--nav-mid);
+      color: white;
+      padding: 40px 20px;
+    }
+
+    .footer-columns {
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+    }
+
+    .footer-columns h4 {
+      margin-bottom: 14px;
+      font-size: 16px;
+    }
+
+    .footer-columns a {
+      display: block;
+      color: #ddd;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .cart-count {
+      background: #f08804;
+      color: #111;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 12px;
+      margin-left: 4px;
+      font-weight: bold;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.25s;
+      z-index: 70;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -430px;
+      width: min(430px, 100%);
+      height: 100vh;
+      background: white;
+      z-index: 80;
+      transition: right 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -8px 0 24px rgba(0,0,0,0.2);
+    }
+
+    .drawer.open {
+      right: 0;
+    }
+
+    .drawer-header,
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .drawer-body {
+      padding: 18px 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .drawer-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      gap: 10px;
+      background: #fff;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item img {
+      width: 84px;
+      height: 84px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .cart-meta h4 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border-radius: 999px;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--muted);
+      padding: 32px 10px;
+    }
+
+    .modal {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.96);
+      width: min(920px, calc(100% - 24px));
+      max-height: 90vh;
+      overflow: hidden;
+      background: white;
+      border-radius: 16px;
+      z-index: 90;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.25s;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.28);
+    }
+
+    .modal.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      max-height: calc(90vh - 72px);
+    }
+
+    .product-modal-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 22px;
+    }
+
+    .product-modal-grid img {
+      width: 100%;
+      border-radius: 14px;
+      max-height: 420px;
+      object-fit: cover;
+    }
+
+    .details-list {
+      margin: 12px 0;
+      padding-left: 18px;
+      color: #333;
+      display: grid;
+      gap: 8px;
+    }
+
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .auth-tab {
+      border: 1px solid var(--border);
+      background: #f7fafa;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .auth-tab.active {
+      background: #fff6df;
+      border-color: #f3c74c;
+    }
+
+    .auth-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .auth-form input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%) translateY(20px);
+      background: #111;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s;
+      z-index: 100;
+      font-size: 14px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #444;
+    }
+
+    @media (max-width: 900px) {
+      .product-modal-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        height: 310px;
+      }
+
+      .slide-overlay h2 {
+        font-size: 23px;
+      }
+
+      .slide-overlay p {
+        font-size: 14px;
+      }
+
+      .section-grid {
+        margin-top: -65px;
+      }
+
+      .card-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top-nav">
+      <div class="logo" onclick="scrollToTop()">amaz<span>on</span></div>
+
+      <div class="location">
+        Deliver to
+        <strong>Pakistan</strong>
+      </div>
+
+      <div class="search-bar">
+        <select id="categorySelect" onchange="applyFilters()">
+          <option value="All">All</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Home">Home</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Books">Books</option>
+          <option value="Accessories">Accessories</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Search Amazon clone" />
+        <button onclick="applyFilters()"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+
+      <div class="account" onclick="openAuthModal()">
+        Hello, <span id="navUserName">sign in</span>
+        <strong>Account & Lists</strong>
+      </div>
+
+      <div class="returns nav-btn">
+        Returns
+        <strong>& Orders</strong>
+      </div>
+
+      <div class="cart" onclick="openCartDrawer()">
+        Cart <span class="cart-count" id="cartCount">0</span>
+        <strong id="cartTotalPreview">$0.00</strong>
+      </div>
+    </div>
+
+   <div class="sub-nav-wrapper">
+  <button class="sub-nav-toggle" onclick="toggleSubNav()" aria-label="Toggle menu" aria-expanded="false" id="subNavToggle">
+    <span>☰ Menu</span>
+  </button>
+
+  <div class="sub-nav" id="subNavMenu">
+    <button class="active-chip" onclick="setQuickFilter('All', this)">☰ All</button>
+    <button onclick="setQuickFilter('Deals', this)">Today's Deals</button>
+    <button onclick="setQuickFilter('Electronics', this)">Electronics</button>
+    <button onclick="setQuickFilter('Home', this)">Home</button>
+    <button onclick="setQuickFilter('Fashion', this)">Fashion</button>
+    <button onclick="setQuickFilter('Books', this)">Books</button>
+    <button onclick="setQuickFilter('Accessories', this)">Accessories</button>
+    <a href="#signinBanner">Customer Service</a>
+    <a href="#">Gift Cards</a>
+    <a href="#">Sell</a>
+  </div>
+</div>
+  </header>
+
+  <section class="hero">
+    <div class="slider-container" id="sliderContainer">
+      <div class="slides">
+        <div class="slide active">
+          <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=2000&q=80" alt="Back to School Deals" />
+          <div class="slide-overlay">
+            <h2>Back to School Deals</h2>
+            <p>Save up to 50% on laptops, books and daily essentials.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=2000&q=80" alt="Electronics Sale" />
+          <div class="slide-overlay">
+            <h2>Electronics Blowout</h2>
+            <p>Latest smartphones, watches and audio gear at special prices.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=2000&q=80" alt="Fashion Trends" />
+          <div class="slide-overlay">
+            <h2>New Fashion Arrivals</h2>
+            <p>Shop trending looks for men and women.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=2000&q=80" alt="Home Essentials" />
+          <div class="slide-overlay">
+            <h2>Home Refresh Sale</h2>
+            <p>Furniture, decor and kitchen upgrades for every room.</p>
+          </div>
+        </div>
+      </div>
+      <button class="slider-arrow left" onclick="prevSlide()" aria-label="Previous slide">‹</button>
+      <button class="slider-arrow right" onclick="nextSlideManual()" aria-label="Next slide">›</button>
+      <div class="nav-dots">
+        <span class="dot active" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        <span class="dot" onclick="currentSlide(4)"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-grid">
+    <div class="box">
+      <h2>New home arrivals under $50</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Dining" /><p>Dining</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Home" /><p>Home</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Kitchen" /><p>Kitchen</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" alt="Decor" /><p>Decor</p></div>
+      </div>
+      <a href="#productsSection">See more</a>
+    </div>
+
+    <div class="box">
+      <h2>Top categories in Kitchen appliances</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+<div class="box">
+      <h2>Shop Fashion for less</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Get your game on</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Fashion trends you like</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Up to 45% off on home refresh</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+    <div class="box">
+      <h2>Easy updates for elevated spaces</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=600&q=80" alt="Mens" /><p>Men</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=600&q=80" alt="Women" /><p>Women</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80" alt="Shoes" /><p>Shoes</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" alt="Accessories" /><p>Accessories</p></div>
+      </div>
+      <a href="#productsSection">Explore fashion</a>
+    </div>
+
+    <div class="box">
+      <h2>Get ready for Easter</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80" alt="Books" /><p>Books</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&q=80" alt="Study" /><p>Study</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=600&q=80" alt="Office" /><p>Office</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=600&q=80" alt="Courses" /><p>Courses</p></div>
+      </div>
+      <a href="#productsSection">Discover more</a>
+    </div>
+  </section>
+
+ 
+
+  <!-- Horizontal product slider (200px height, items 200px width) -->
+  <section class="products-section" id="miniSliderSection">
+    <div class="products-header">
+      <h2>Best Sellers in Clothing, Shoes & Jewelry</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(-2)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(2)">›</button>
+
+      <div id="miniSlider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+         <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="products-section" id="miniSliderSection">
+    <div class="products-header">
+      <h2>Top Sellers in Toys for you</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(-2)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(2)">›</button>
+
+      <div id="miniSlider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+         <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+<section class="section-grid1">
+    <div class="box">
+      <h2>Level up your gaming</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Dining" /><p>Dining</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Home" /><p>Home</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Kitchen" /><p>Kitchen</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" alt="Decor" /><p>Decor</p></div>
+      </div>
+      <a href="#productsSection">See more</a>
+    </div>
+
+    <div class="box">
+      <h2>Gear up to get fit</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+<div class="box">
+      <h2>Level up your beauty routine</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Have more fun with family</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+  </section>
+
+  <section class="products-section" id="miniSliderSection">
+    <div class="products-header">
+      <h2>Top picks for Pakistan</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(-1)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(1)">›</button>
+
+      <div id="miniSlider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+        <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="products-section" id="miniSliderSection">
+    <div class="products-header">
+      <h2>Best Sellers in Computers & Accessories</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(-1)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(1)">›</button>
+
+      <div id="miniSlider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+          <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="section-grid1">
+    <div class="box">
+      <h2>Level up your PC here</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Dining" /><p>Dining</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Home" /><p>Home</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Kitchen" /><p>Kitchen</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" alt="Decor" /><p>Decor</p></div>
+      </div>
+      <a href="#productsSection">See more</a>
+    </div>
+
+    <div class="box">
+      <h2>Gaming merchandise</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+<div class="box">
+      <h2>Shop for your home essentials</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Most-loved watches</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+  </section>
+
+  <section class="products-section" id="miniSliderSection">
+    <div class="products-header">
+      <h2>Popular products in Wireless internationally</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(-1)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(1)">›</button>
+
+      <div id="miniSlider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+         <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="products-section" id="miniSliderSection">
+    <div class="products-header">
+      <h2>International top sellers in Kitchen
+</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(-1)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(1)">›</button>
+
+      <div id="miniSlider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+          <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+  
+  <section class="section-grid1">
+    <div class="box">
+      <h2>Finds for Home</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Dining" /><p>Dining</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" alt="Home" /><p>Home</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" alt="Kitchen" /><p>Kitchen</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" alt="Decor" /><p>Decor</p></div>
+      </div>
+      <a href="#productsSection">See more</a>
+    </div>
+
+    <div class="box">
+      <h2>Deals on top categories</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+<div class="box">
+      <h2>Score the top PCs & Accessories</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div><div class="box">
+      <h2>Explore more in Sports</h2>
+      <div class="mini-grid">
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80" alt="Phones" /><p>Smartphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Laptops" /><p>Laptops</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" /><p>Headphones</p></div>
+        <div class="mini-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Watches" /><p>Wearables</p></div>
+      </div>
+      <a href="#productsSection">Shop now</a>
+    </div>
+  </section>
+    <section class="products-section" id="miniSliderSection">
+    <div class="products-header">
+      <h2>Best Sellers in Beauty & Personal Care</h2>
+     
+    </div>
+
+    <div style="position:relative">
+      <button class="slider-arrow left" onclick="scrollMini(-1)">‹</button>
+      <button class="slider-arrow right" onclick="scrollMini(1)">›</button>
+
+      <div id="miniSlider" style="display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:10px 40px; height:300px; align-items:center">
+         <img src="images/image1.jpg" alt="">
+         <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+         <img src="images/shrt.jpg" alt="">
+          <img src="images/image1.jpg" alt="">
+          <img src="images/bag.jpg" alt="">
+          <img src="images/bunan.jpg" alt="">
+           <img src="images/card.jpg" alt="">
+         <img src="images/purse.jpg" alt="">
+          <img src="images/shoes.jpg" alt="">
+           <img src="images/shirt.jpg" alt="">
+      </div>
+    </div>
+  </section>
+  <section class="products-section" id="productsSection">
+    <div class="products-header">
+      <h2>Customers who viewed items in your browsing history also viewed</h2>
+      <p id="resultsText">Showing 0 items</p>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-right">
+        <label for="sortSelect">Sort by:</label>
+        <select id="sortSelect" onchange="applyFilters()">
+          <option value="featured">Featured</option>
+          <option value="priceLow">Price: Low to High</option>
+          <option value="priceHigh">Price: High to Low</option>
+          <option value="ratingHigh">Top Rated</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="products-row" id="productsContainer"></div>
+  </section>
+  
+  <section class="signin-banner" id="signinBanner">
+    <h3>See personalized recommendations</h3>
+    <p id="signinText">Sign in to save your cart, manage your account, and view your orders.</p>
+    <button class="cta-btn" onclick="openAuthModal()">Sign in</button>
+  </section>
+
+  <div class="footer-top" onclick="scrollToTop()">Back to top</div>
+
+  <footer class="footer-main">
+    <div class="footer-columns">
+      <div>
+        <h4>Get to Know Us</h4>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+        <a href="#">About Amazon</a>
+        <a href="#">Investor Relations</a>
+        <a href="#">Amazon Devices</a>
+        <a href="#">Amazon Science</a>
+      </div>
+      <div>
+        <h4>Make Money with Us</h4>
+        <a href="#">Sell products on Amazon</a>
+        <a href="#">Sell on Amazon Business</a>
+        <a href="#">Sell apps on Amazon</a>
+        <a href="#">Become an Affiliate</a>
+        <a href="#">Advertise Your Products</a>
+        <a href="#">Self-Publish with Us</a>
+        <a href="#">Host an Amazon Hub</a>
+        <a href="#">See More Make Money with Us</a>
+      </div>
+      <div>
+        <h4>Amazon Payment Products</h4>
+        <a href="#">Amazon Business Card</a>
+        <a href="#">Shop with points</a>
+        <a href="#">Reload Your Balance</a>
+        <a href="#">Amazon Currency Converter</a>
+      </div>
+      <div>
+        <h4>Let Us Help You</h4>
+        <a href="#">Amazon and COVID- <br> 19</a>
+        <a href="#">Your Account</a>
+        <a href="#">Your Orders</a>
+        <a href="#">Shipping Rates<br> & Policies</a>
+           <a href="#">Returns &<br> Replacements</a>
+              <a href="#">Manage Your<br> Content and  Devices</a>
+                 <a href="#">Help</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="overlay" id="overlay" onclick="closeAllPanels()"></div>
+
+  <aside class="drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <h3>Your Cart</h3>
+      <button class="close-btn" onclick="closeCartDrawer()">×</button>
+    </div>
+    <div class="drawer-body" id="cartItemsContainer"></div>
+    <div class="drawer-footer">
+      <div><strong>Subtotal:</strong> <span id="cartSubtotal">$0.00</span></div>
+      <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+      <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+    </div>
+  </aside>
+
+  <div class="modal" id="productModal">
+    <div class="modal-header">
+      <h3>Product Details</h3>
+      <button class="close-btn" onclick="closeProductModal()">×</button>
+    </div>
+    <div class="modal-body" id="productModalBody"></div>
+  </div>
+
+  <div class="modal" id="authModal">
+    <div class="modal-header">
+      <h3>Account Access</h3>
+      <button class="close-btn" onclick="closeAuthModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="signinTabBtn" onclick="switchAuthTab('signin')">Sign In</button>
+        <button class="auth-tab" id="signupTabBtn" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+      <form class="auth-form" id="authForm" onsubmit="handleAuth(event)">
+        <input type="text" id="authName" placeholder="Full name" style="display:none" />
+        <input type="email" id="authEmail" placeholder="Email address" required />
+        <input type="password" id="authPassword" placeholder="Password" required />
+        <button class="auth-submit" type="submit" id="authSubmitBtn">Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const products = [
+      {
+        id: 1,
+        title: 'Wireless Noise-Canceling Headphones',
+        category: 'Electronics',
+        price: 89.99,
+        oldPrice: 129.99,
+        rating: 4.6,
+        reviews: 8421,
+        badge: 'Limited time deal',
+        prime: true,
+        deal: true,
+        stock: 'In Stock',
+        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
+        delivery: 'FREE delivery tomorrow',
+        description: ['Active noise canceling', '40-hour battery life', 'Comfort-fit ear cushions', 'Built-in microphone for calls']
+      },
+      {
+        id: 2,
+        title: 'Smart Watch with Fitness Tracking',
+        category: 'Electronics',
+        price: 59.99,
+        oldPrice: 79.99,
+        rating: 4.4,
+        reviews: 2199,
+        badge: 'Best seller',
+        prime: true,
+        deal: false,
+        stock: 'In Stock',
+        image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
+        delivery: 'FREE delivery in 2 days',
+        description: ['Heart-rate monitoring', 'Sleep and step tracking', 'App notifications', 'Water-resistant design']
+      },
+      {
+        id: 3,
+        title: 'Ergonomic Office Chair',
+        category: 'Home',
+        price: 179.99,
+        oldPrice: 239.99,
+        rating: 4.5,
+        reviews: 517,
+        badge: 'Top rated',
+        prime: false,
+        deal: true,
+        stock: 'In Stock',
+        image: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?auto=format&fit=crop&w=800&q=80',
+        delivery: 'Delivery available this week',
+        description: ['Lumbar support', 'Adjustable armrests', 'Breathable mesh back', 'Smooth rolling wheels']
+      },
+      {
+        id: 4,
+        title: 'Programmable Coffee Maker',
+        category: 'Home',
+        price: 49.99,
+        oldPrice: 69.99,
+        rating: 4.3,
+        reviews: 3049,
+        badge: 'Deal',
+        prime: true,
+        deal: true,
+        stock: 'In Stock',
+        image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80',
+        delivery: 'FREE delivery tomorrow',
+        description: ['12-cup brewing', 'Programmable timer', 'Auto shut-off', 'Easy-clean filter basket']
+      },
+      {
+        id: 5,
+        title: 'Lightweight Running Shoes',
+        category: 'Fashion',
+        price: 64.99,
+        oldPrice: 89.99,
+        rating: 4.2,
+        reviews: 1740,
+        badge: 'Popular',
+        prime: false,
+        deal: false,
+        stock: 'In Stock',
+        image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
+        delivery: 'Delivery in 3 days',
+        description: ['Lightweight cushioning', 'Breathable upper mesh', 'Flexible outsole', 'Daily running comfort']
+      },
+      {
+        id: 6,
+        title: 'Travel Laptop Backpack',
+        category: 'Accessories',
+        price: 39.99,
+        oldPrice: 54.99,
+        rating: 4.4,
+        reviews: 923,
+        badge: 'New arrival',
+        prime: true,
+        deal: false,
+        stock: 'In Stock',
+        image: 'https://images.unsplash.com/photo-1542291026-d29b6f7d52f1?auto=format&fit=crop&w=800&q=80',
+        delivery: 'FREE delivery tomorrow',
+        description: ['Laptop sleeve compartment', 'USB charging port', 'Water-resistant fabric', 'Travel-friendly design']
+      },
+      {
+        id: 7,
+        title: 'Daily Productivity Handbook',
+        category: 'Books',
+        price: 18.99,
+        oldPrice: 24.99,
+        rating: 4.7,
+        reviews: 611,
+        badge: 'Editor pick',
+        prime: false,
+        deal: false,
+        stock: 'In Stock',
+        image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80',
+        delivery: 'Delivery available in 2 days',
+        description: ['Goal-setting frameworks', 'Time management tips', 'Focus strategies', 'Printable productivity systems']
+      },
+      {
+        id: 8,
+        title: 'Portable Bluetooth Speaker',
+        category: 'Electronics',
+        price: 29.99,
+        oldPrice: 44.99,
+        rating: 4.5,
+        reviews: 4050,
+        badge: 'Hot pick',
+        prime: true,
+        deal: true,
+        stock: 'In Stock',
+        image: 'https://images.unsplash.com/photo-1589003077984-894e133dabab?auto=format&fit=crop&w=800&q=80',
+        delivery: 'FREE delivery tomorrow',
+        description: ['Strong bass output', 'Portable compact build', 'Bluetooth 5.0', 'Long battery backup']
+      }
+    ];
+
+    let slideIndex = 1;
+    let slideInterval;
+    let cart = JSON.parse(localStorage.getItem('amazonCloneCart') || '[]');
+    let currentProduct = null;
+    let authMode = 'signin';
+    let currentUser = JSON.parse(localStorage.getItem('amazonCloneUser') || 'null');
+    let primeOnly = false;
+    let dealsOnly = false;
+    let quickFilter = 'All';
+
+    function saveCart() {
+      localStorage.setItem('amazonCloneCart', JSON.stringify(cart));
+    }
+
+    function saveUser() {
+      localStorage.setItem('amazonCloneUser', JSON.stringify(currentUser));
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function formatPrice(value) {
+      return `$${value.toFixed(2)}`;
+    }
+
+    function getStars(rating) {
+      const full = Math.round(rating);
+      return '★'.repeat(full) + '☆'.repeat(5 - full);
+    }
+
+    function renderProducts(list) {
+      const container = document.getElementById('productsContainer');
+      container.innerHTML = '';
+
+      if (!list.length) {
+        container.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No products found. Try another search or filter.</div>';
+        document.getElementById('resultsText').textContent = 'Showing 0 items';
+        return;
+      }
+
+      list.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.title}" onclick="openProductModal(${product.id})" />
+          <div class="badge">${product.badge}</div>
+          <div class="product-title" onclick="openProductModal(${product.id})">${product.title}</div>
+          <div class="rating">${getStars(product.rating)} (${product.reviews.toLocaleString()})</div>
+          <div class="prime-badge">${product.prime ? 'Prime eligible' : 'Standard delivery'}</div>
+          <div class="price"><sup>$</sup>${Math.floor(product.price)}<sup>${String(product.price.toFixed(2)).split('.')[1]}</sup></div>
+          <div class="old-price">List: ${formatPrice(product.oldPrice)}</div>
+          <div class="delivery">${product.delivery}</div>
+          <div class="stock in">${product.stock}</div>
+          <div class="card-actions">
+            <button class="add-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+            <button class="view-btn" onclick="openProductModal(${product.id})">View Details</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.getElementById('resultsText').textContent = `Showing ${list.length} item${list.length !== 1 ? 's' : ''}`;
+    }
+
+    function applyFilters() {
+      const search = document.getElementById('searchInput').value.toLowerCase().trim();
+      const category = document.getElementById('categorySelect').value;
+      const sort = document.getElementById('sortSelect').value;
+
+      let filtered = [...products].filter(product => {
+        const matchesSearch = `${product.title} ${product.category} ${product.badge}`.toLowerCase().includes(search);
+        const matchesCategory = category === 'All' || product.category === category;
+        const matchesQuick = quickFilter === 'All' || quickFilter === 'Deals' ? (quickFilter === 'Deals' ? product.deal : true) : product.category === quickFilter;
+        const matchesPrime = !primeOnly || product.prime;
+        const matchesDeals = !dealsOnly || product.deal;
+        return matchesSearch && matchesCategory && matchesQuick && matchesPrime && matchesDeals;
+      });
+
+      if (sort === 'priceLow') filtered.sort((a, b) => a.price - b.price);
+      if (sort === 'priceHigh') filtered.sort((a, b) => b.price - a.price);
+      if (sort === 'ratingHigh') filtered.sort((a, b) => b.rating - a.rating);
+
+      renderProducts(filtered);
+    }
+
+    function setQuickFilter(value, el) {
+      quickFilter = value;
+      document.querySelectorAll('.sub-nav button').forEach(btn => btn.classList.remove('active-chip'));
+      el.classList.add('active-chip');
+      renderMiniSlider();
+      applyFilters();
+    }
+
+    function togglePrimeFilter() {
+      primeOnly = !primeOnly;
+      document.getElementById('primeFilterBtn').classList.toggle('active-filter', primeOnly);
+      applyFilters();
+    }
+
+    function toggleDealsFilter() {
+      dealsOnly = !dealsOnly;
+      document.getElementById('dealsFilterBtn').classList.toggle('active-filter', dealsOnly);
+      applyFilters();
+    }
+
+    function addToCart(productId) {
+      const product = products.find(item => item.id === productId);
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+      saveCart();
+      updateCartUI();
+      showToast(`${product.title} added to cart`);
+    }
+
+    function updateCartUI() {
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      document.getElementById('cartCount').textContent = count;
+      document.getElementById('cartTotalPreview').textContent = formatPrice(total);
+      document.getElementById('cartSubtotal').textContent = formatPrice(total);
+
+      const container = document.getElementById('cartItemsContainer');
+      if (!cart.length) {
+        container.innerHTML = '<div class="empty-state"><h4>Your Amazon clone cart is empty</h4><p>Add some products to get started.</p></div>';
+        return;
+      }
+
+      container.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.title}" />
+          <div class="cart-meta">
+            <h4>${item.title}</h4>
+            <div class="stock in">${item.stock}</div>
+            <div class="muted">${formatPrice(item.price)} each</div>
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+              <strong>${item.qty}</strong>
+              <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+              <button class="secondary-btn" onclick="removeFromCart(${item.id})">Remove</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function changeQty(productId, delta) {
+      const item = cart.find(product => product.id === productId);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(product => product.id !== productId);
+      }
+      saveCart();
+      updateCartUI();
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.id !== productId);
+      saveCart();
+      updateCartUI();
+      showToast('Item removed from cart');
+    }
+
+    function clearCart() {
+      cart = [];
+      saveCart();
+      updateCartUI();
+      showToast('Cart cleared');
+    }
+
+    function checkout() {
+      if (!cart.length) {
+        showToast('Your cart is empty');
+        return;
+      }
+      if (!currentUser) {
+        closeCartDrawer();
+        openAuthModal();
+        showToast('Sign in first to continue checkout');
+        return;
+      }
+      showToast(`Checkout complete. Thanks, ${currentUser.name.split(' ')[0]}!`);
+      clearCart();
+      closeCartDrawer();
+    }
+
+    function openCartDrawer() {
+      document.getElementById('cartDrawer').classList.add('open');
+      document.getElementById('overlay').classList.add('show');
+      document.body.classList.add('no-scroll');
+    }
+
+    function closeCartDrawer() {
+      document.getElementById('cartDrawer').classList.remove('open');
+      if (!document.getElementById('productModal').classList.contains('show') && !document.getElementById('authModal').classList.contains('show')) {
+        document.getElementById('overlay').classList.remove('show');
+        document.body.classList.remove('no-scroll');
+      }
+    }
+
+    function openProductModal(productId) {
+      const product = products.find(item => item.id === productId);
+      currentProduct = product;
+      document.getElementById('productModalBody').innerHTML = `
+        <div class="product-modal-grid">
+          <div>
+            <img src="${product.image}" alt="${product.title}" />
+          </div>
+          <div>
+            <div class="badge">${product.badge}</div>
+            <h2 style="margin-bottom:10px">${product.title}</h2>
+            <div class="rating" style="margin-bottom:8px">${getStars(product.rating)} ${product.rating} (${product.reviews.toLocaleString()} ratings)</div>
+            <div class="prime-badge" style="margin-bottom:10px">${product.prime ? 'Prime eligible' : 'Standard shipping'}</div>
+            <div class="price" style="margin-bottom:10px"><sup>$</sup>${Math.floor(product.price)}<sup>${String(product.price.toFixed(2)).split('.')[1]}</sup></div>
+            <div class="old-price">List price: ${formatPrice(product.oldPrice)}</div>
+            <div class="delivery" style="margin:10px 0">${product.delivery}</div>
+            <div class="stock in">${product.stock}</div>
+            <ul class="details-list">${product.description.map(item => `<li>${item}</li>`).join('')}</ul>
+            <div class="card-actions">
+              <button class="add-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+              <button class="view-btn" onclick="buyNow(${product.id})">Buy Now</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('productModal').classList.add('show');
+      document.getElementById('overlay').classList.add('show');
+      document.body.classList.add('no-scroll');
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModal').classList.remove('show');
+      if (!document.getElementById('cartDrawer').classList.contains('open') && !document.getElementById('authModal').classList.contains('show')) {
+        document.getElementById('overlay').classList.remove('show');
+        document.body.classList.remove('no-scroll');
+      }
+    }
+
+    function buyNow(productId) {
+      addToCart(productId);
+      closeProductModal();
+      openCartDrawer();
+    }
+
+    function openAuthModal() {
+      document.getElementById('authModal').classList.add('show');
+      document.getElementById('overlay').classList.add('show');
+      document.body.classList.add('no-scroll');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('show');
+      if (!document.getElementById('cartDrawer').classList.contains('open') && !document.getElementById('productModal').classList.contains('show')) {
+        document.getElementById('overlay').classList.remove('show');
+        document.body.classList.remove('no-scroll');
+      }
+    }
+
+    function closeAllPanels() {
+      closeCartDrawer();
+      closeProductModal();
+      closeAuthModal();
+      document.getElementById('overlay').classList.remove('show');
+      document.body.classList.remove('no-scroll');
+    }
+
+    function switchAuthTab(mode) {
+      authMode = mode;
+      document.getElementById('signinTabBtn').classList.toggle('active', mode === 'signin');
+      document.getElementById('signupTabBtn').classList.toggle('active', mode === 'signup');
+      document.getElementById('authName').style.display = mode === 'signup' ? 'block' : 'none';
+      document.getElementById('authSubmitBtn').textContent = mode === 'signup' ? 'Create Account' : 'Sign In';
+    }
+
+    function handleAuth(event) {
+      event.preventDefault();
+      const nameInput = document.getElementById('authName');
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value.trim();
+      const name = nameInput.value.trim() || email.split('@')[0];
+
+      if (!email || !password) return;
+      currentUser = { name, email };
+      saveUser();
+      updateUserUI();
+      closeAuthModal();
+      showToast(authMode === 'signup' ? 'Account created successfully' : 'Signed in successfully');
+      document.getElementById('authForm').reset();
+      switchAuthTab('signin');
+    }
+
+    function updateUserUI() {
+      const navUserName = document.getElementById('navUserName');
+      const signinText = document.getElementById('signinText');
+      if (currentUser) {
+        navUserName.textContent = currentUser.name.split(' ')[0];
+        signinText.textContent = `Welcome back, ${currentUser.name}. Your cart and account are saved locally in this browser.`;
+      } else {
+        navUserName.textContent = 'sign in';
+        signinText.textContent = 'Sign in to save your cart, manage your account, and view your orders.';
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function showSlide(n) {
+      const slides = document.querySelectorAll('.slide');
+      const dots = document.querySelectorAll('.dot');
+
+      if (n > slides.length) slideIndex = 1;
+      else if (n < 1) slideIndex = slides.length;
+      else slideIndex = n;
+
+      slides.forEach(slide => slide.classList.remove('active'));
+      dots.forEach(dot => dot.classList.remove('active'));
+      slides[slideIndex - 1].classList.add('active');
+      dots[slideIndex - 1].classList.add('active');
+    }
+
+    function nextSlide() {
+      slideIndex++;
+      showSlide(slideIndex);
+    }
+
+    function prevSlide() {
+      stopSlider();
+      slideIndex--;
+      showSlide(slideIndex);
+      startSlider();
+    }
+
+    function nextSlideManual() {
+      stopSlider();
+      slideIndex++;
+      showSlide(slideIndex);
+      startSlider();
+    }
+
+    function currentSlide(n) {
+      stopSlider();
+      showSlide(n);
+      startSlider();
+    }
+
+    function startSlider() {
+      stopSlider();
+      slideInterval = setInterval(nextSlide, 4000);
+    }
+
+    function stopSlider() {
+      clearInterval(slideInterval);
+    }
+
+    document.getElementById('searchInput').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') applyFilters();
+    });
+
+    function renderMiniSlider() {
+      const container = document.getElementById('miniSlider');
+      container.innerHTML = '';
+
+      products.forEach(p => {
+        const item = document.createElement('div');
+        item.style.minWidth = '200px';
+        item.style.maxWidth = '200px';
+        item.style.height = '180px';
+        item.style.border = '1px solid #ddd';
+        item.style.borderRadius = '10px';
+        item.style.padding = '10px';
+        item.style.background = '#fff';
+        item.style.cursor = 'pointer';
+
+        item.innerHTML = `
+          <img src="${p.image}" style="width:100%; height:110px; object-fit:cover; border-radius:6px" />
+          <div style="font-size:13px; margin-top:6px; height:32px; overflow:hidden">${p.title}</div>
+          <div style="font-weight:bold">$${p.price}</div>
+        `;
+
+        item.onclick = () => openProductModal(p.id);
+        container.appendChild(item);
+      });
+    }
+
+    function scrollMini(dir) {
+      const container = document.getElementById('miniSlider');
+      container.scrollBy({ left: dir * 220, behavior: 'smooth' });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      applyFilters();
+      updateCartUI();
+      updateUserUI();
+      startSlider();
+
+      const sliderContainer = document.getElementById('sliderContainer');
+      sliderContainer.addEventListener('mouseenter', stopSlider);
+      sliderContainer.addEventListener('mouseleave', startSlider);
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowLeft') prevSlide();
+        if (event.key === 'ArrowRight') nextSlideManual();
+      });
+    });
+
+    
+  function toggleSubNav() {
+    const menu = document.getElementById('subNavMenu');
+    const toggleBtn = document.getElementById('subNavToggle');
+    const isOpen = menu.classList.toggle('show');
+
+    toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+
+  window.addEventListener('resize', () => {
+    const menu = document.getElementById('subNavMenu');
+    const toggleBtn = document.getElementById('subNavToggle');
+
+    if (window.innerWidth > 768) {
+      menu.classList.remove('show');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  </script>
+</body>
+</html>
